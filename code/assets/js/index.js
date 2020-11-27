@@ -1,7 +1,17 @@
 $(function () {
     getUserInfo();
-});
+    var layer=layui.layer;
+    $('#btnLogout').on('click',function(){
+        layer.confirm('是否确认退出?', {icon: 3, title:'提示'}, function(index){
+            //do something
+            localStorage.removeItem("token")
+            location.href="/login.html";
+            layer.close(index);
+          });
+    })
 
+});
+// 1.渲染用户名
 function getUserInfo() {
     $.ajax({
         method: 'GET',
@@ -11,7 +21,7 @@ function getUserInfo() {
 
         },
         success: function (res) {
-            console.log(res);
+            // console.log(res);
             if (res.status !== 0) {
                 return layer.msg(res.message, {icon: 5});
             }
@@ -20,6 +30,7 @@ function getUserInfo() {
         }
     })
 }
+// 2.渲染头像
 function renderAvatar(user){
     // 1.渲染名称
     var name =user.nickname||user.username;
