@@ -16,14 +16,15 @@ $(function () {
         ],
         // 判断两次的密码
         repwd: function (value) {
-            var pwd = $('.reg-box[name=password]').val();
-            if (pwd !== value) {
+            var pwd = $('.reg-box input[name=password]').val();
+            if (value !== pwd) {
                 return "两次密码输入不一致，请重新输入！！"
             }
         }
     })
 
     // 2.注册功能
+    var layer = layui.layer;
     $('#form_reg').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
@@ -35,9 +36,15 @@ $(function () {
             },
             success: function (res) {
                 if (res.status !== 0) {
-                    return layer.msg(res.message, {icon: 5})
+                    return layer.msg(res.message, {
+                        icon: 5
+                    })
                 }
-                layer.msg(res.message, {icon: 6});
+                layer.msg(res.message, {
+                    icon: 6
+                });
+                $('#link_login').click();
+                $('#form_reg')[0].reset();
             }
         })
     })
@@ -46,17 +53,21 @@ $(function () {
     $('#form_login').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            method:'POST',
-            url:'/api/login',
-            data:$(this).serialize(),
-            success:function(res){
+            method: 'POST',
+            url: '/api/login',
+            data: $(this).serialize(),
+            success: function (res) {
                 console.log(res);
-                if(res.status!==0){
-                    return layer.msg(res.message, {icon: 5});
+                if (res.status !== 0) {
+                    return layer.msg(res.message, {
+                        icon: 5
+                    });
                 }
-                layer.msg(res.message, {icon: 6});
-                localStorage.setItem('token',res.token);
-                // location.href="/index.html";
+                layer.msg(res.message, {
+                    icon: 6
+                });
+                localStorage.setItem('token', res.token);
+                location.href = "/index.html";
             }
         })
     })
